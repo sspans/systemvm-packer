@@ -6,7 +6,7 @@ date
 
 add_backports () {
   sed -i '/backports/d' /etc/apt/sources.list
-  echo 'deb http://http.debian.net/debian wheezy-backports main' >> /etc/apt/sources.list
+  echo 'deb http://http.debian.net/debian jessie-backports main' >> /etc/apt/sources.list
 }
 
 apt_upgrade () {

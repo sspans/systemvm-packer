@@ -1,0 +1,14 @@
+[Unit]
+Description=Start Cosmic Agent
+After=mountkernfs.service local-fs.target cloud-early-config.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+EnvironmentFile=-/etc/default/cloud
+ExecStart=/etc/init.d/cloud start
+ExecStop=/etc/init.d/cloud stop
+ExecReload=/etc/init.d/cloud restart
+
+[Install]
+WantedBy=multi-user.target

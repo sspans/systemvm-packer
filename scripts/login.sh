@@ -16,6 +16,7 @@ configure_cloud_user () {
 }
 
 configure_sudoers () {
+  mkdir -p /etc/sudoers.d
   cat >/etc/sudoers <<END
 Defaults	env_reset
 Defaults	exempt_group=admin

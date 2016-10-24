@@ -12,8 +12,8 @@ configure_apache2 () {
    a2enmod ssl rewrite auth_basic auth_digest
    a2ensite default-ssl
    # Backup stock apache configuration since we may modify it in Secondary Storage VM
-   cp /etc/apache2/sites-available/default /etc/apache2/sites-available/default.orig
-   cp /etc/apache2/sites-available/default-ssl /etc/apache2/sites-available/default-ssl.orig
+   cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.orig
+   cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf.orig
    sed -i 's/SSLProtocol all -SSLv2$/SSLProtocol all -SSLv2 -SSLv3/g' /etc/apache2/mods-available/ssl.conf
 }
 
@@ -21,8 +21,7 @@ install_cloud_scripts () {
    echo "Installing initial version of cloud-early-config"
    mv /tmp/cloud-early-config /etc/init.d
    chmod 755 /etc/init.d/cloud-early-config
-   chkconfig --add cloud-early-config
-   chkconfig cloud-early-config on
+   systemctl enable cloud-early-config
 
    echo "Installing initial version of patchsystemvm.sh"
    mkdir -p /opt/cloud/bin/
@@ -49,11 +48,11 @@ configure_services () {
   install_cloud_scripts
   do_signature
 
-  chkconfig xl2tpd off
+  systemctl disable xl2tpd
 
   # Disable services that slow down boot and are not used anyway
-  chkconfig x11-common off
-  chkconfig console-setup off
+  systemctl disable x11-common
+  systemctl disable console-setup
 
   configure_apache2
 }

@@ -6,8 +6,8 @@
     [
         {
             "type": "qemu",
-            "iso_url": "http://cdimage.debian.org/cdimage/archive/7.11.0/amd64/iso-cd/debian-7.11.0-amd64-netinst.iso",
-            "iso_checksum": "096c1c18b44c269808bd815d58c53c8f",
+            "iso_url": "http://cdimage.debian.org/debian-cd/8.6.0/amd64/iso-cd/debian-8.6.0-amd64-netinst.iso",
+            "iso_checksum": "e9f61bf327db6d8f7cee05a99f2353cc",
             "iso_checksum_type": "md5",
             "output_directory": "packer_output",
             "ssh_wait_timeout": "30s",
@@ -38,7 +38,7 @@
             [
                 "<esc><wait5>",
                 "install <wait>",
-                "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed/debian7.preseed ",
+                "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed/debian86.preseed ",
                 "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
                 "keyboard-configuration/xkb-keymap=us ",
                 "netcfg/get_hostname=cosmic-systemvm ",
@@ -52,6 +52,16 @@
     ],
     "provisioners":
     [
+        {
+            "type": "file",
+            "source": "files/cloud-early-config.service",
+            "destination": "/etc/systemd/system/cloud-early-config.service"
+        },
+        {
+            "type": "file",
+            "source": "files/cloud.service",
+            "destination": "/etc/systemd/system/cloud.service"
+        },
         {
             "type": "file",
             "source": "files/cloud-early-config",
@@ -79,7 +89,8 @@
                 "scripts/conntrack.sh",
                 "scripts/service_config.sh",
                 "scripts/cleanup.sh",
-                "scripts/tmout.sh"
+                "scripts/tmout.sh",
+		"scripts/systemd.sh"
             ],
             "execute_command": "bash '{{.Path}}'"
         }
