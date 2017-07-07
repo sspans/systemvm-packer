@@ -6,8 +6,8 @@
     [
         {
             "type": "qemu",
-            "iso_url": "http://cdimage.debian.org/cdimage/archive/7.11.0/amd64/iso-cd/debian-7.11.0-amd64-netinst.iso",
-            "iso_checksum": "096c1c18b44c269808bd815d58c53c8f",
+            "iso_url": "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-9.0.0-amd64-netinst.iso",
+            "iso_checksum": "83253a530270e46a5d6e66daf3431c33",
             "iso_checksum_type": "md5",
             "output_directory": "packer_output",
             "ssh_wait_timeout": "30s",
@@ -15,7 +15,7 @@
             "disk_size": "20480",
             "format": "qcow2",
             "accelerator": "kvm",
-            "headless": "true",
+            "headless": "false",
             "qemuargs":
             [
                 [ "-m", "512M" ],
