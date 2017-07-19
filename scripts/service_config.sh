@@ -21,8 +21,7 @@ install_cloud_scripts () {
    echo "Installing initial version of cloud-early-config"
    mv /tmp/cloud-early-config /etc/init.d
    chmod 755 /etc/init.d/cloud-early-config
-   chkconfig --add cloud-early-config
-   chkconfig cloud-early-config on
+   systemctl enable cloud-early-config
 
    echo "Installing initial version of patchsystemvm.sh"
    mkdir -p /opt/cloud/bin/
@@ -34,11 +33,6 @@ do_signature () {
   mkdir -p /var/cache/cloud/ /usr/share/cloud/
   echo 'zero' > /var/cache/cloud/cloud-scripts-signature
   echo "Cloudstack Release $SYSTEMVM_RELEASE $(date)" > /etc/cloudstack-release
-}
-
-service_order () {
-  insserv -v -d 2>&1
-  find /etc/| grep -E "cloud-early|qemu-guest"
 }
 
 configure_services () {
@@ -54,15 +48,13 @@ configure_services () {
   install_cloud_scripts
   do_signature
 
-  chkconfig xl2tpd off
+  systemctl disable xl2tpd
 
   # Disable services that slow down boot and are not used anyway
-  chkconfig x11-common off
-  chkconfig console-setup off
+  systemctl disable x11-common
+  systemctl disable console-setup
 
   configure_apache2
-
-  service_order
 }
 
 return 2>/dev/null || configure_services

@@ -131,6 +131,16 @@ enable_serial_console() {
    sed -i -e "/6:23:respawn/a\s0:2345:respawn:/sbin/getty -L 115200 ttyS0 vt102" /etc/inittab
 }
 
+# check for systemd or sysv system
+# TODO: Need to be changed in the future if we ditch Debian7
+if [ -L "/sbin/init" ]; then
+    function chkconfig {
+        case $2 in
+            off)  systemctl disable --now $1 ;;
+            on)   systemctl enable --now $1 ;;
+        esac
+    }
+fi
 
 CMDLINE=$(cat /var/cache/cloud/cmdline)
 TYPE="router"

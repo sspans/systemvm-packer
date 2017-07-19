@@ -37,7 +37,12 @@ configure_hostname () {
   hostname $HOSTNAME
 }
 
+use_old_names () {
+  ln -s /dev/null /etc/systemd/network/99-default.link
+}
+
 configure_networking () {
+  use_old_names
   set_interface_sleep
   configure_resolv_conf
   delete_dhcp_ip

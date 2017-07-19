@@ -13,8 +13,6 @@ apt_upgrade () {
   DEBIAN_FRONTEND=noninteractive
   DEBIAN_PRIORITY=critical
 
-  add_backports
-
   apt-get clean
   apt-get -q -y --force-yes update
   apt-get -q -y --force-yes upgrade
