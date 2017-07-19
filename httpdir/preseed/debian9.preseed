@@ -1,0 +1,88 @@
+# Debian 7 preseed
+
+# Scan another CD or DVD?
+apt-cdrom-setup apt-setup/cdrom/set-first boolean false
+
+### Localization
+# Locale sets language and country.
+d-i debian-installer/locale string en_US
+
+# Keyboard
+d-i console-setup/ask_detect boolean false
+d-i keyboard-configuration/layout select USA
+d-i keyboard-configuration/variant select USA
+d-i keyboard-configuration/modelcode string pc105
+
+### Network configuration
+d-i netcfg/choose_interface select auto
+d-i netcfg/get_hostname string systemvm
+d-i netcfg/get_domain string systemvm
+
+### Mirror settings
+d-i mirror/country string manual
+d-i mirror/http/hostname string ftp.nl.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+
+### Clock and time zone setup
+d-i clock-setup/utc boolean true
+d-i time/zone string UTC
+d-i clock-setup/ntp boolean true
+
+### Partitioning
+d-i partman-auto/disk string /dev/vda
+d-i partman-auto/method string regular
+d-i partman-auto/choose_recipe select atomic
+d-i partman/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i partman/mount_style select uuid
+
+### Base system
+d-i base-installer/install-recommends boolean true
+d-i base-installer/kernel/image string linux-image-amd64
+d-i apt-setup/non-free boolean true
+d-i apt-setup/contrib boolean true
+d-i apt-setup/use_mirror boolean true 
+
+### Account setup
+d-i passwd/root-login boolean true
+d-i passwd/root-password password password
+d-i passwd/root-password-again password password
+d-i passwd/user-fullname string Cloud Stack
+d-i passwd/username string cloud
+d-i passwd/user-password password cloud
+d-i passwd/user-password-again password cloud
+d-i user-setup/encrypt-home boolean false
+d-i user-setup/allow-password-weak boolean true
+d-i passwd/user-default-groups string audio cdrom video admin
+
+### Apt setup
+# ...
+
+### Package selection
+d-i debconf debconf/frontend select Noninteractive
+sysstat sysstat/enable boolean true
+iptables-persistent iptables-persistent/autosave_v4 boolean true
+iptables-persistent iptables-persistent/autosave_v6 boolean true
+
+tasksel tasksel/first multiselect ssh-server
+d-i pkgsel/include string ntp bzip2 socat ftp iputils-arping curl zip unzip virt-what python-netaddr apache2 dnsmasq dnsmasq-utils nfs-common cifs-utils xl2tpd ipsec-tools tdb-tools xenstore-utils libxenstore3.0 conntrackd ipvsadm libnetfilter-conntrack3 iptables-persistent libssl-dev libapr1-dev python-flask radvd keepalived openssh-server net-tools less traceroute
+
+# Allowed values: none, safe-upgrade, full-upgrade
+d-i pkgsel/upgrade select none
+
+
+popularity-contest popularity-contest/participate boolean false
+
+### Boot loader installation
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+d-i grub-installer/bootdev string /dev/vda
+
+d-i finish-install/reboot_in_progress note
+
+#### Advanced options
+## SSH PermitRootLogin
+d-i preseed/late_command string sed -i 's/.*PermitRootLogin.*/PermitRootLogin yes/g' /target/etc/ssh/sshd_config
