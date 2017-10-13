@@ -148,6 +148,8 @@ yum -y install python36u
 
 # Install pip
 curl "https://bootstrap.pypa.io/get-pip.py" | python
+curl "https://bootstrap.pypa.io/get-pip.py" | python3.6
+pip install python-inotify
 
 # Set virtual-guest as default profile for tuned
 echo "virtual-guest" > /etc/tune-profiles/active-profile
